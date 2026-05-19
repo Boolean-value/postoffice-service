@@ -1,0 +1,55 @@
+server:
+  port: ${PORT:0}
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        default_schema: public
+    show-sql: ${SHOW_SQL:false}
+    open-in-view: false
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/mail_postoffice?currentSchema=public
+    username: postgres
+    password: 123
+  liquibase:
+    default-schema: public
+    change-log: classpath:db/changelog-master.xml
+  kafka:
+    bootstrap-servers: ${KAFKA_POST_BOOTSTRAP_SERVERS:localhost:9096}
+    consumer:
+      group-id: ${KAFKA_POST_GROUP_ID:post-group}
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+    producer:
+      acks: all
+      retries: 5
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
+        delivery.timeout.ms: 120000
+        request.timeout.ms: 15000
+        linger.ms: 5
+        retry.backoff.ms: 1000
+    listener:
+      type: single
+      auto-startup: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8762/eureka}
+
+app:
+  outbox:
+    scheduler:
+      delay: PT5S
+      expired: PT24H
+  kafka:
+    topics:
+      send-letter: ${SEND_LETTER_TOPIC:send-letter}
+      delivery-letter: ${DELIVERY_LETTER_TOPIC:delivery-letter}
+      send-dlt-topic: ${SEND_TOPIC:send-letter-dlt}

@@ -1,0 +1,11 @@
+server:
+  port: ${PORT}
+
+spring:
+  application:
+    name: mail_postoffice
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE}
