@@ -1,5 +1,6 @@
 package com.exercise.postoffice.config;
 
+import com.exercise.postoffice.model.dto.DeliveryLetter;
 import com.exercise.postoffice.model.dto.SendLetter;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -34,5 +35,22 @@ public class PostKafkaProducerConfig {
     @Bean
     public KafkaTemplate<String, SendLetter> sendLetterKafkaTemplate() {
         return new KafkaTemplate<>(sendLetterProducerFactory());
+    }
+
+    @Bean
+    public ProducerFactory<String, DeliveryLetter> getDeliveryproducerFactory() {
+        Map<String, Object> props =
+                kafkaProperties.buildProducerProperties();
+
+        return new DefaultKafkaProducerFactory<>(
+                props,
+                new StringSerializer(),
+                new JsonSerializer<>()
+        );
+    }
+
+    @Bean
+    public KafkaTemplate<String, DeliveryLetter> deliveryLetterKafkaTemplate() {
+        return new KafkaTemplate<>(getDeliveryproducerFactory());
     }
 }
