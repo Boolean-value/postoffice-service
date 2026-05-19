@@ -56,7 +56,7 @@ public class PostKafkaConsumerConfig {
         );
 
         DefaultErrorHandler handler =
-                new DefaultErrorHandler(new FixedBackOff(1000L, 3));
+                new DefaultErrorHandler(recoverer, new FixedBackOff(1000L, 3));
 
         handler.addNotRetryableExceptions(IllegalArgumentException.class, DeserializationException.class);
         handler.setRetryListeners((record, ex, attempt) -> {

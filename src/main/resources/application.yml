@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: mail_postoffice
+    name: mail-postoffice
 
 eureka:
   client:

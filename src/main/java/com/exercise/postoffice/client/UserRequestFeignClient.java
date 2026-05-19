@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "kafka-saga-users")
+@FeignClient(name = "mail-mainservice")
 public interface UserRequestFeignClient {
 
     @GetMapping("/internal/getRandomUser")
